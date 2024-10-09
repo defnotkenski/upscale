@@ -44,7 +44,9 @@ if __name__ == "__main__":
     print("Starting upscale.")
 
     spandrel_extra_arches.install()
-    model_path = Path.cwd().joinpath("srformer_4x.pth")
+
+    model_path = Path.cwd().joinpath("upscale_models", "srformer_4x.pth")
+    path_to_img = Path.cwd().joinpath("input_images", "original.png")
 
     model = ModelLoader().load_from_file(model_path)
 
@@ -52,8 +54,6 @@ if __name__ == "__main__":
 
     model.scale = 4
     model.cuda().eval()
-
-    path_to_img = Path.cwd().joinpath("input_images", "original.png")
 
     image = pil_to_tensor(img=Image.open(path_to_img))
     image = process(image=image, span_model=model)
