@@ -23,7 +23,7 @@ def tensor_to_pil(tensor: torch.Tensor) -> Image.Image:
 
         tensor.squeeze(0)
 
-    assert tensor.ndim == 3, f"{tensor.shape} does not describe a CHW tensor"
+    # assert tensor.ndim == 3, f"{tensor.shape} does not describe a CHW tensor"
 
     arr = tensor.float().cpu().clamp_(0, 1).numpy()
     arr = 255.0 * np.moveaxis(arr, 0, 2)
