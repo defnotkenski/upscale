@@ -23,7 +23,7 @@ def tensor_to_pil(tensor: torch.Tensor) -> Image.Image:
 
         tensor.squeeze(0)
 
-    # assert tensor.ndim == 3, f"{tensor.shape} does not describe a CHW tensor"
+    assert tensor.ndim == 3, f"{tensor.shape} does not describe a CHW tensor"
 
     arr = tensor.float().cpu().clamp_(0, 1).numpy()
     arr = 255.0 * np.moveaxis(arr, 0, 2)
@@ -45,7 +45,7 @@ if __name__ == "__main__":
 
     spandrel_extra_arches.install()
 
-    model_path = Path.cwd().joinpath("upscale_models", "srformer_4x.pth")
+    model_path = Path.cwd().joinpath("upscale_models", "srformer_4x_stock.pth")
     path_to_img = Path.cwd().joinpath("input_images", "original.png")
 
     model = ModelLoader().load_from_file(model_path)
