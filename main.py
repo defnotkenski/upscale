@@ -17,13 +17,13 @@ def pil_to_tensor(img: Image.Image) -> torch.Tensor:
 
 
 def tensor_to_pil(tensor: torch.Tensor) -> Image.Image:
-    if tensor.ndim == 4:
-        if tensor.shape[0] != 1:
-            raise ValueError(f"{tensor.shape} does not describe a BCHW tensor.")
-
-        tensor.squeeze(0)
-
-    assert tensor.ndim == 3, f"{tensor.shape} does not describe a CHW tensor"
+    # if tensor.ndim == 4:
+    #     if tensor.shape[0] != 1:
+    #         raise ValueError(f"{tensor.shape} does not describe a BCHW tensor.")
+    #
+    #     tensor.squeeze(0)
+    #
+    # assert tensor.ndim == 3, f"{tensor.shape} does not describe a CHW tensor"
 
     arr = tensor.float().cpu().clamp_(0, 1).numpy()
     arr = 255.0 * np.moveaxis(arr, 0, 2)
