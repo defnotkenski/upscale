@@ -7,6 +7,15 @@ from PIL import Image
 import numpy as np
 
 
+def setup_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("model", default=None, required=True, help="Path to upscaling model.")
+    parser.add_argument("output_file", default="output.png", required=True, help="Name of output image.")
+    parser.add_argument("input_file", default="original.png", required=True, help="Name of input image.")
+
+    return parser
+
+
 def pil_to_tensor(img: Image.Image) -> torch.Tensor:
     img = np.array(img.convert("RGB"))
     img = img[:, :, ::-1]
@@ -35,30 +44,37 @@ def tensor_to_pil(tensor: torch.Tensor) -> Image.Image:
     return Image.fromarray(arr, "RGB")
 
 
-def process(image: torch.Tensor, span_model: any) -> torch.Tensor:
+def process(image_tensors: torch.Tensor, span_model: any) -> torch.Tensor:
     with torch.no_grad():
-        upscaled_img = span_model(image)
+        upscaled_img = span_model(image_tensors)
 
         return upscaled_img
 
 
 if __name__ == "__main__":
     print("Starting upscale.")
+    upscale_parser = setup_parser()
+    args = upscale_parser.parse_args()
 
+    print("Installing extra arches.")
     spandrel_extra_arches.install()
 
-    model_path = Path.cwd().joinpath("upscale_models", "srformer_4x.pth")
-    path_to_img = Path.cwd().joinpath("input_images", "original.png")
+    curr_dir = Path.cwd()
+
+    model_path = curr_dir.joinpath("upscale_models", args.model)
+    path_to_img = curr_dir.joinpath("input_images", args.input_file)
+    output_path = curr_dir.joinpath("output_images", args.output_file)
 
     model = ModelLoader().load_from_file(model_path)
 
     assert isinstance(model, ImageModelDescriptor)
 
-    model.scale = 4
+    # model.scale = 4
     model.cuda().eval()
 
     image = pil_to_tensor(img=Image.open(path_to_img))
-    image = process(image=image, span_model=model)
+    image = process(image_tensors=image, span_model=model)
     image = tensor_to_pil(tensor=image)
 
-    image.save(Path.cwd().joinpath("output_images", "upscaled.png"))
+    image.save(output_path)
+    print(f"Upscaling finished. Saved output to {output_path}")
