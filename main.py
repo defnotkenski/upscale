@@ -47,7 +47,7 @@ if __name__ == "__main__":
 
     spandrel_extra_arches.install()
 
-    model_path = Path.cwd().joinpath("upscale_models", "srformer_4x_stock.pth")
+    model_path = Path.cwd().joinpath("upscale_models", "srformer_4x.pth")
     path_to_img = Path.cwd().joinpath("input_images", "original.png")
 
     model = ModelLoader().load_from_file(model_path)
