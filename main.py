@@ -53,6 +53,7 @@ def process(image_tensors: torch.Tensor, span_model: any) -> torch.Tensor:
 
 if __name__ == "__main__":
     print("Starting upscale.")
+    torch.cuda.empty_cache()
     upscale_parser = setup_parser()
     args = upscale_parser.parse_args()
 
@@ -61,9 +62,9 @@ if __name__ == "__main__":
 
     curr_dir = Path.cwd()
 
-    model_path = curr_dir.joinpath("upscale_models", args.model)
-    path_to_img = curr_dir.joinpath("input_images", args.input_file)
-    output_path = curr_dir.joinpath("output_images", args.output_file)
+    model_path = curr_dir.joinpath(args.model)
+    path_to_img = curr_dir.joinpath(args.input_file)
+    output_path = curr_dir.joinpath(args.output_file)
 
     model = ModelLoader().load_from_file(model_path)
 
