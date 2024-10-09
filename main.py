@@ -9,6 +9,7 @@ import numpy as np
 
 def setup_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser()
+    
     parser.add_argument("--model", default=None, required=True, help="Path to upscaling model.")
     parser.add_argument("--output_file", default="output.png", required=False, help="Name of output image.")
     parser.add_argument("--input_file", default="original.png", required=False, help="Name of input image.")
